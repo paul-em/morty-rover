@@ -12,6 +12,10 @@ unsigned long lastCommandTime = 0;
 const unsigned long SAFETY_TIMEOUT = 2000;
 bool motorsRunning = false;
 
+unsigned long turnStopTime = 0;
+bool turnPending = false;
+const unsigned long TURN_DURATION = 150;
+
 void setup() {
     pinMode(ena, OUTPUT);
     pinMode(in1, OUTPUT);
@@ -24,6 +28,11 @@ void setup() {
 }
 
 void loop() {
+    if (turnPending && millis() >= turnStopTime) {
+        stopMotors();
+        motorsRunning = false;
+        turnPending = false;
+    }
     if (motorsRunning && millis() - lastCommandTime > SAFETY_TIMEOUT) {
         stopMotors();
         motorsRunning = false;
@@ -84,12 +93,16 @@ int motorControl(String command) {
         setMotor(ena, in1, in2, "reverse", speed);
         setMotor(enb, in3, in4, "forward", speed);
         motorsRunning = true;
+        turnPending = true;
+        turnStopTime = millis() + TURN_DURATION;
         return speed;
     }
     if (action == "right") {
         setMotor(ena, in1, in2, "forward", speed);
         setMotor(enb, in3, in4, "reverse", speed);
         motorsRunning = true;
+        turnPending = true;
+        turnStopTime = millis() + TURN_DURATION;
         return speed;
     }
     if (action == "stop") {

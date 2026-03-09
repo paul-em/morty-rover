@@ -16,6 +16,7 @@ if (!TOKEN || !DEVICE_ID) {
 
 const DRIVE_SPEED = process.argv[2] || "120";
 const TURN_SPEED = process.argv[3] || "90";
+const TURN_REPEAT_MS = 400;
 const KEEPALIVE_MS = 800;
 
 let currentDirection = "stop";
@@ -46,7 +47,9 @@ function setDirection(direction) {
     return;
   }
 
-  const speed = direction === "left" || direction === "right" ? TURN_SPEED : DRIVE_SPEED;
+  const isTurn = direction === "left" || direction === "right";
+  const speed = isTurn ? TURN_SPEED : DRIVE_SPEED;
+  const interval = isTurn ? TURN_REPEAT_MS : KEEPALIVE_MS;
   const argument = `${direction},${speed}`;
 
   fireCommand(argument);
@@ -54,7 +57,7 @@ function setDirection(direction) {
   clearInterval(keepaliveInterval);
   keepaliveInterval = setInterval(() => {
     fireCommand(argument);
-  }, KEEPALIVE_MS);
+  }, interval);
 }
 
 const pressed = new Set();
