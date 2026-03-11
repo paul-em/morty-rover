@@ -14,8 +14,8 @@ if (!TOKEN || !DEVICE_ID) {
   process.exit(1);
 }
 
-const DRIVE_SPEED = process.argv[2] || "120";
-const TURN_SPEED = process.argv[3] || "90";
+const DRIVE_SPEED = process.argv[2] || "255";
+const TURN_SPEED = process.argv[3] || "45";
 const TURN_REPEAT_MS = 400;
 const KEEPALIVE_MS = 800;
 

@@ -14,7 +14,7 @@ bool motorsRunning = false;
 
 unsigned long turnStopTime = 0;
 bool turnPending = false;
-const unsigned long TURN_DURATION = 200;
+const unsigned long TURN_DURATION = 400;
 
 void setup() {
     pinMode(ena, OUTPUT);
